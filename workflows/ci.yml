@@ -1,0 +1,27 @@
+name: HTML CI
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-html:
+    name: Validate static website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Check required HTML file
+        run: test -f index.html
+      - name: Check HTML document structure
+        run: |
+          grep -qi '<!DOCTYPE html>' index.html
+          grep -qi '<html lang="id">' index.html
+          grep -qi '</html>' index.html
+          grep -qi 'id="krsForm"' index.html
+      - name: Check JavaScript KRS validation
+        run: |
+          grep -q 'maximumCredits = 24' index.html
+          grep -q 'Pilih minimal satu mata kuliah' index.html
